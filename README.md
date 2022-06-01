@@ -44,8 +44,6 @@ In this project, you will use data provided by [Motivate](https://www.motivateco
 
 # Project Assumptions
 * Some template code was provided.
-* This project is made inside a python script.
-* Some pre-processing was made to the original dataset before it was made available for the project.
 
 # Data Dictionary
 Data for the first six months of 2017 are provided. The data file contain six (6) columns.
