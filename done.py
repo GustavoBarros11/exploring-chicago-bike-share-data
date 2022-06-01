@@ -2,7 +2,6 @@
 
 # Here goes the imports
 import csv
-from math import ceil
 import matplotlib.pyplot as plt
 
 # Let's read the data as a list
@@ -29,9 +28,9 @@ input("Press Enter to continue...")
 # TASK 1
 # TODO: Print the first 20 rows using a loop to identify the data.
 print("\n\nTASK 1: Printing the first 20 samples")
-# declaração for que é usada para criar um iterador que me permite obter as primeiras 20 amostras da variável data_list e imprimi-las
+# for statement that is used to create a iterator that alows me to get the first 20 samples from the data_list variable and print them out
 for i in range(20):
-    print(f'{i+1}° {data_list[i]}')
+    print("{}. {}".format(i, data_list[i]))
 
 # Let's change the data_list to remove the header from it.
 data_list = data_list[1:]
@@ -44,13 +43,9 @@ input("Press Enter to continue...")
 # TODO: Print the `gender` of the first 20 rows
 
 print("\nTASK 2: Printing the genders of the first 20 samples")
-# declaração for que é usado para criar um iterador que me permite obter as primeiras 20 amostras da coluna Gender e imprimi-las
+# for statement that is used to create a iterator that alows me to get the first 20 samples from the Gender column and print them out
 for i in range(20):
-    if data_list[i][-2] == "":
-        print(f'{i+1}° ---')
-    else:
-        print(f'{i+1}° {data_list[i][-2]}')
-
+    print("{}. {}".format(i, data_list[i][-2]))
 
 # Cool! We can get the rows(samples) iterating with a for and the columns(features) by index.
 # But it's still hard to get a column in a list. Example: List with all genders
@@ -70,13 +65,11 @@ def column_to_list(data, index):
         A list with the elements of the specified column.
     """
     column_list = []
-
-    # Dica: Você pode usar um for para iterar sobre as linhas e obter a coluna pelo índice e adicioná-la a lista
+    # Tip: You can use a for to iterate over the samples, get the feature by index and append into a list
     for elem in data:
         column_list.append(elem[index])
 
     return column_list
-
 
 # Let's check with the genders if it's working (only the first 20)
 print("\nTASK 3: Printing the list of genders of the first 20 samples")
@@ -95,12 +88,11 @@ input("Press Enter to continue...")
 male = 0
 female = 0
 
-for i in range(len(data_list)):
-    if data_list[i][-2] == 'Male':
+for elem in data_list:
+    if elem[-2] == "Male":
         male += 1
-    elif data_list[i][-2] == 'Female':
+    elif elem[-2] == "Female":
         female += 1
-
 
 # Checking the result
 print("\nTASK 4: Printing how many males and females we found")
@@ -128,10 +120,10 @@ def count_gender(data_list):
     male = 0
     female = 0
 
-    for row in data_list:
-        if row[-2] == 'Male':
+    for elem in data_list:
+        if elem[-2] == "Male":
             male += 1
-        elif row[-2] == 'Female':
+        elif elem[-2] == "Female":
             female += 1
 
     return [male, female]
@@ -162,12 +154,12 @@ def most_popular_gender(data_list):
         The answer. Wether the most popular gender is Male, Female or Equal(equal number of males and females)
     """
     answer = ""
-    
-    genders = count_gender(data_list)
 
-    if genders[0] > genders[1]:
+    tot_genders_list = count_gender(data_list)
+
+    if tot_genders_list[0] > tot_genders_list[1]: 
         answer = "Male"
-    elif genders[1] > genders[0]:
+    elif tot_genders_list[0] < tot_genders_list[1]: 
         answer = "Female"
     else:
         answer = "Equal"
@@ -201,7 +193,7 @@ input("Press Enter to continue...")
 print("\nTASK 7: Check the chart!")
 
 # def count_user_types(data_list: list) -> list:
-def count_user_types(data):
+def count_user_types(data_list):
     """
     Function that counts the number of user types
     Args:
@@ -211,31 +203,25 @@ def count_user_types(data):
     """
     customer = 0
     subscriber = 0
-    dependent = 0
 
-    for i in range(len(data)):
-        if data[i][-3] == 'Subscriber':
-            subscriber += 1
-        elif data[i][-3] == 'Customer':
+    for elem in data_list:
+        if elem == "Customer":
             customer += 1
-        elif data[i][-3] == 'Dependent':
-            dependent += 1
+        elif elem == "Subscriber":
+            subscriber += 1
 
-    return [subscriber, customer, dependent]
-
+    return [subscriber, customer]
 
 user_types_list = column_to_list(data_list, -3)
-# types = list(set(user_types_list))
-types = ['Subscriber', 'Customer', 'Dependent']
-quantity = count_user_types(data_list)
+types = ["Subscriber", "Customer"]
+quantity = count_user_types(user_types_list)
 y_pos = list(range(len(types)))
 plt.bar(y_pos, quantity)
 plt.ylabel('Quantity')
 plt.xlabel('User Types')
 plt.xticks(y_pos, types)
-plt.title('Quantity by User Type')
+plt.title('Quantity by User Types')
 plt.show(block=True)
-
 
 input("Press Enter to continue...")
 # TASK 8
@@ -243,7 +229,7 @@ input("Press Enter to continue...")
 male, female = count_gender(data_list)
 print("\nTASK 8: Why the following condition is False?")
 print("male + female == len(data_list):", male + female == len(data_list))
-answer = "Porque dentro da coluna \'gender\' existem valores nulos, linhas que não foram preenchidas pelo usuário, seja por não indentificarem com nenhum dos dois gêneros, ou por não quererem preecher esse campo, ou por terem simplesmente esquecido."
+answer = "Because there is missing data, this means that some users have chosen not to provide their gender because they do not fit into any of the options or simply do not want to respond or have forgotten to fill the field."
 print("Answer:", answer)
 
 # ------------ DO NOT CHANGE ANY CODE HERE ------------
@@ -306,15 +292,14 @@ input("Press Enter to continue...")
 # TASK 11
 # Go back and make sure you documented your functions. Explain the input, output and what it do. Example:
 def new_function(param1: int, param2: str) -> list:
-     """
-     Example function with annotations.
-     Args:
-         param1: The first parameter.
-         param2: The second parameter.
-     Returns:
-         List of X values
-
-     """
+    """
+    Example function with annotations.
+    Args:
+        param1: The first parameter.
+        param2: The second parameter.
+    Returns:
+        List of X values
+    """
 
 input("Press Enter to continue...")
 # TASK 12 - Challenge! (Optional)
@@ -332,16 +317,14 @@ def count_items(column_list):
     Returns:
         The function returns two variables, the first contains the number of distinct types of values ​​present in the specified column, and the second variable stores a list with the number of elements of each value in the column.
     """
-    item_types = list(set(column_list))
-    count_items = [0, 0, 0]
-    
-    for element in column_list:
-        if element == item_types[0]:
-            count_items[0] += 1
-        elif element == item_types[1]:
-            count_items[1] += 1
-        elif element == item_types[2]:
-            count_items[2] += 1
+    item_types = [i for i in list(set(column_list))]
+    count_items = []
+    for i in range(len(item_types)):
+        sum = 0
+        for item in column_list:
+            if item == item_types[i]:
+                sum += 1
+        count_items.append(sum)
 
     return item_types, count_items
 
